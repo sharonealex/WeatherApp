@@ -1,0 +1,26 @@
+min-100-vh{
+    min-height: 100vh;
+  }
+
+  flex-column{
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+  }  
+
+  p-5{
+   padding: 1.375rem;
+  }
+  
+  text-center{
+    text-align: center;
+  }
+  
+  text-white {
+    color: white;
+    font-size: 2rem;
+  }
+  
+  bg-primary{
+ background-color: slateblue;
+  }
