@@ -9,9 +9,11 @@ var windSpeedEl = document.querySelector("#wind-speed");
 var pressureEl = document.querySelector("#pressure");
 var uvindexEl = document.querySelector("#UV-index");
 var uvIndexValue;
-const forecastEl = document.querySelectorAll(".forecast");
+var forecastEl = document.querySelectorAll(".forecast");
 
-
+/**
+ * Function to extract the UV index of a city against the provided latiuted and longitude.
+ * */
 
 function getUvIndex(lat, lon, currentWeatherObj) {
 
@@ -34,6 +36,10 @@ function getUvIndex(lat, lon, currentWeatherObj) {
         })
 }
 
+/**
+ * The current weather result is iterated and rendered through HTML tags
+ * */
+
 function displayCurrentWeather(city, weather) {
     cityEl.textContent = city;
 
@@ -52,7 +58,10 @@ function displayCurrentWeather(city, weather) {
 }
 
 
-
+/**
+ * Queries the openweatherMap api for current dates weather.
+ * Also calls a separate call to fetch the UVIndex.
+ * */
 
 function getDashboardResults(city) {
     var currentWeatherRequest =
@@ -84,29 +93,37 @@ function getDashboardResults(city) {
         })
 }
 
+/**
+ * Forecast for 5 days is iterated and rendered through HTML tags
+ * */
+
 function displayForecast(forecastData){
     for (i=0; i < forecastEl.length; i++) {
         forecastEl[i].innerHTML = "";
-        const forecastIndex = i*8 + 4;
+        var forecastIndex = i*8 + 4;
         var forecastMonth = '4';
         var forecastDay = '4';
         var forecastYear = '5';
-        const forecastDateEl = document.createElement("p");
+        var forecastDateEl = document.createElement("p");
         forecastDateEl.setAttribute("class","mt-3 mb-0 forecast-date");
         forecastDateEl.innerHTML = forecastMonth + "/" + forecastDay + "/" + forecastYear;
         forecastEl[i].append(forecastDateEl);
-        const forecastWeatherEl = document.createElement("img");
+        var forecastWeatherEl = document.createElement("img");
         forecastWeatherEl.setAttribute("src","https://openweathermap.org/img/wn/10d@2x.png");
         forecastWeatherEl.setAttribute("alt",forecastData.list[0].weather[0].description);
         forecastEl[i].append(forecastWeatherEl);
-        const forecastTempEl = document.createElement("p");
+        var forecastTempEl = document.createElement("p");
         forecastTempEl.innerHTML = "Temp: " + forecastData.list[0].main.temp;
         forecastEl[i].append(forecastTempEl);
-        const forecastHumidityEl = document.createElement("p");
+        var forecastHumidityEl = document.createElement("p");
         forecastHumidityEl.innerHTML = "Humidity: " + forecastData.list[0].main.humidity + "%";
         forecastEl[i].append(forecastHumidityEl);
     }
 }
+
+/**
+ * API call to forecast API and return 5 days of weather forcast.
+ * */
 
 function get5DaysForeCastDashboardResults(city){
     var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=london&appid=40cb67d75c988d881d5132977c0b65a5"
@@ -125,6 +142,9 @@ function get5DaysForeCastDashboardResults(city){
     
 }
 
+/**
+ * Event handler for search button
+ * */
 
 var searchHandler = function (event) {
     event.preventDefault();
@@ -132,13 +152,10 @@ var searchHandler = function (event) {
     if (city) {
         getDashboardResults(city);
         get5DaysForeCastDashboardResults(city);
-        // cities.unshift({city});
         cityInputEl.value = "";
     } else {
         alert("Please enter a City");
     }
-    // saveSearch();
-    // pastSearch(city);
 }
 
 
