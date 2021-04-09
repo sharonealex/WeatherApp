@@ -9,11 +9,11 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
-    <link
+   <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" /> 
     <title>Weather Dashboard</title>
   </head>
   <body>
@@ -29,7 +29,7 @@
           <p class="my-3 h4">Search city</p>
           <div class="input-group mb-3">
             <input
-              id="city-input"
+              id="city"
               type="text"
               class="form-control"
               placeholder="Enter city..."
@@ -47,28 +47,28 @@
             <div class="col-12 border border-light m-3 rounded">
               <div class="row">
                 <div class="col-12">
-                  <span id="city" style="font-size: 30px">Melbourne</span>
-                  <img id="current-pic" src="statusIcon" alt="" />
+                  <span id="searchedCity" style="font-size: 30px">Melbourne</span>
+               <!--<img id="current-pic" src="statusIcon" alt="" />-->   
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12" >
+                 <h6 id="temperature"></h6>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12">
-                  <p id="temperature">T</p>
+                  <h6 id="humidity"></h6>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12">
-                  <p id="humidity">H</p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <p id="wind-speed">W</p>
+                  <h6 id="wind-speed"></h6>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12 d-flex">
-                  <p id="UV-index">U</p>
+                  <h6 id="UV-index"></h6>
                 </div>
               </div>
             </div>
