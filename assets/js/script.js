@@ -10,6 +10,7 @@ var pressureEl = document.querySelector("#pressure");
 var uvindexEl = document.querySelector("#UV-index");
 var uvIndexValue;
 var forecastEl = document.querySelectorAll(".forecast");
+var index = 0;
 
 /**
  * Function to extract the UV index of a city against the provided latiuted and longitude.
@@ -99,25 +100,25 @@ function getDashboardResults(city) {
 
 function displayForecast(forecastData){
     for (i=0; i < forecastEl.length; i++) {
+        
         forecastEl[i].innerHTML = "";
-        var forecastIndex = i*8 + 4;
-        var forecastMonth = '4';
-        var forecastDay = '4';
-        var forecastYear = '5';
+        var unixFormat = moment.unix(forecastData.list[index].dt).format("MMM Do, YYYY, hh:mm:ss");
         var forecastDateEl = document.createElement("p");
         forecastDateEl.setAttribute("class","mt-3 mb-0 forecast-date");
-        forecastDateEl.innerHTML = forecastMonth + "/" + forecastDay + "/" + forecastYear;
+        forecastDateEl.innerHTML = unixFormat
         forecastEl[i].append(forecastDateEl);
         var forecastWeatherEl = document.createElement("img");
-        forecastWeatherEl.setAttribute("src","https://openweathermap.org/img/wn/10d@2x.png");
-        forecastWeatherEl.setAttribute("alt",forecastData.list[0].weather[0].description);
+      //  forecastWeatherEl.setAttribute("src","https://openweathermap.org/img/wn/10d@2x.png");
+      forecastWeatherEl.setAttribute("src", "https://openweathermap.org/img/wn/" + forecastData.list[index].weather[0].icon + "@2x.png");
+        forecastWeatherEl.setAttribute("alt", "weatherImg"+i);
         forecastEl[i].append(forecastWeatherEl);
         var forecastTempEl = document.createElement("p");
-        forecastTempEl.innerHTML = "Temp: " + forecastData.list[0].main.temp;
+        forecastTempEl.innerHTML = "Temp: " + forecastData.list[index].main.temp;
         forecastEl[i].append(forecastTempEl);
         var forecastHumidityEl = document.createElement("p");
-        forecastHumidityEl.innerHTML = "Humidity: " + forecastData.list[0].main.humidity + "%";
+        forecastHumidityEl.innerHTML = "Humidity: " + forecastData.list[index].main.humidity + "%";
         forecastEl[i].append(forecastHumidityEl);
+        index = index + 8;
     }
 }
 
@@ -126,7 +127,7 @@ function displayForecast(forecastData){
  * */
 
 function get5DaysForeCastDashboardResults(city){
-    var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=london&appid=40cb67d75c988d881d5132977c0b65a5"
+    var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=40cb67d75c988d881d5132977c0b65a5";
     fetch(forecastUrl)
     .then(function(resp){
         return resp.json();
@@ -138,8 +139,6 @@ function get5DaysForeCastDashboardResults(city){
     .catch(function(err){
         console.log('error'+  err);
     })
-
-    
 }
 
 /**
