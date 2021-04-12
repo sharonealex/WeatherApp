@@ -11,6 +11,8 @@ var uvindexEl = document.querySelector("#UV-index");
 var uvIndexValue;
 var forecastEl = document.querySelectorAll(".forecast");
 var index = 0;
+var searchedCitiesList = [];
+const searchHistoryEl = document.querySelector("#searchTable");
 
 /**
  * Function to extract the UV index of a city against the provided latiuted and longitude.
@@ -98,19 +100,19 @@ function getDashboardResults(city) {
  * Forecast for 5 days is iterated and rendered through HTML tags
  * */
 
-function displayForecast(forecastData){
-    for (i=0; i < forecastEl.length; i++) {
-        
+function displayForecast(forecastData) {
+    for (i = 0; i < forecastEl.length; i++) {
+
         forecastEl[i].innerHTML = "";
         var unixFormat = moment.unix(forecastData.list[index].dt).format("MMM Do, YYYY, hh:mm:ss");
         var forecastDateEl = document.createElement("p");
-        forecastDateEl.setAttribute("class","mt-3 mb-0 forecast-date");
+        forecastDateEl.setAttribute("class", "mt-3 mb-0 forecast-date");
         forecastDateEl.innerHTML = unixFormat
         forecastEl[i].append(forecastDateEl);
         var forecastWeatherEl = document.createElement("img");
-      //  forecastWeatherEl.setAttribute("src","https://openweathermap.org/img/wn/10d@2x.png");
-      forecastWeatherEl.setAttribute("src", "https://openweathermap.org/img/wn/" + forecastData.list[index].weather[0].icon + "@2x.png");
-        forecastWeatherEl.setAttribute("alt", "weatherImg"+i);
+        //  forecastWeatherEl.setAttribute("src","https://openweathermap.org/img/wn/10d@2x.png");
+        forecastWeatherEl.setAttribute("src", "https://openweathermap.org/img/wn/" + forecastData.list[index].weather[0].icon + "@2x.png");
+        forecastWeatherEl.setAttribute("alt", "weatherImg" + i);
         forecastEl[i].append(forecastWeatherEl);
         var forecastTempEl = document.createElement("p");
         forecastTempEl.innerHTML = "Temp: " + forecastData.list[index].main.temp;
@@ -126,35 +128,63 @@ function displayForecast(forecastData){
  * API call to forecast API and return 5 days of weather forcast.
  * */
 
-function get5DaysForeCastDashboardResults(city){
-    var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=40cb67d75c988d881d5132977c0b65a5";
+function get5DaysForeCastDashboardResults(city) {
+    var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=40cb67d75c988d881d5132977c0b65a5";
     fetch(forecastUrl)
-    .then(function(resp){
-        return resp.json();
-    })
-    .then(function(forecastData){
-        console.log(forecastData);
-        displayForecast(forecastData)
-    })
-    .catch(function(err){
-        console.log('error'+  err);
-    })
+        .then(function (resp) {
+            return resp.json();
+        })
+        .then(function (forecastData) {
+            displayForecast(forecastData)
+        })
+        .catch(function (err) {
+            console.log('error' + err);
+        })
 }
+
+function saveCityName(city) {
+    searchedCitiesList.push(city);
+    localStorage.setItem("cities", searchedCitiesList)
+}
+
+function displaySearchedCitiesList() {
+
+    if(localStorage.getItem("cities")){
+        var cities = localStorage.getItem("cities");
+        for (let i=0; i<cities.length; i++) {
+            var row = searchHistoryEl.insertRow(1);
+            var cell = row.insertCell(0);
+            cell.innerHTML = cities[i];
+        }
+    }
+
+   
+}
+
 
 /**
  * Event handler for search button
  * */
 
 var searchHandler = function (event) {
+
     event.preventDefault();
     var city = cityInputEl.value.trim();
     if (city) {
+        windSpeedEl.textContent = '';
+        tempEl.textContent = '';
+        humidityEl.textContent = '';
+        cityEl.textContent = city;
+
         getDashboardResults(city);
         get5DaysForeCastDashboardResults(city);
         cityInputEl.value = "";
     } else {
-        alert("Please enter a City");
+        alert("Please enter valid City for search");
     }
+    saveCityName(city);
+    displaySearchedCitiesList();
+
 }
 
 
