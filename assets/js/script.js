@@ -175,15 +175,14 @@ var searchHandler = function (event) {
         tempEl.textContent = '';
         humidityEl.textContent = '';
         cityEl.textContent = city;
-
+        cityInputEl.value = "";
         getDashboardResults(city);
         get5DaysForeCastDashboardResults(city);
-        cityInputEl.value = "";
     } else {
         alert("Please enter valid City for search");
     }
     saveCityName(city);
-    displaySearchedCitiesList();
+    //displaySearchedCitiesList();  Not working.
 
 }
 
