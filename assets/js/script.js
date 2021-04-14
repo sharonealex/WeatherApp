@@ -1,4 +1,7 @@
 var currentWeatherObj;
+var uvIndexValue;
+var index = 0;
+var searchedCitiesList = [];
 var cityInputEl = document.querySelector("#city");
 var citySearchEl = document.querySelector("#search-button");
 var processCurrentWeatherData1;
@@ -8,11 +11,8 @@ var humidityEl = document.querySelector("#humidity");
 var windSpeedEl = document.querySelector("#wind-speed");
 var pressureEl = document.querySelector("#pressure");
 var uvindexEl = document.querySelector("#UV-index");
-var uvIndexValue;
 var forecastEl = document.querySelectorAll(".forecast");
-var index = 0;
-var searchedCitiesList = [];
-const searchHistoryEl = document.querySelector("#searchTable");
+const searchHistoryEl = document.querySelector("#history");
 
 /**
  * Function to extract the UV index of a city against the provided latiuted and longitude.
@@ -57,7 +57,6 @@ function displayCurrentWeather(city, weather) {
     var windSpan = document.createElement('span');
     windSpan.textContent = "Wind Speed: " + weather.wind + "MPH";
     windSpeedEl.appendChild(windSpan);
-
 }
 
 
@@ -101,9 +100,9 @@ function getDashboardResults(city) {
  * */
 
 function displayForecast(forecastData) {
+    index = 0;
     for (i = 0; i < forecastEl.length; i++) {
-
-        forecastEl[i].innerHTML = "";
+        forecastEl[i].textContent = "";
         var unixFormat = moment.unix(forecastData.list[index].dt).format("MMM Do, YYYY, hh:mm:ss");
         var forecastDateEl = document.createElement("p");
         forecastDateEl.setAttribute("class", "mt-3 mb-0 forecast-date");
@@ -143,22 +142,30 @@ function get5DaysForeCastDashboardResults(city) {
 }
 
 function saveCityName(city) {
-    searchedCitiesList.push(city);
-    localStorage.setItem("cities", searchedCitiesList)
+    var cities = localStorage.getItem("cities");
+    if (cities) {
+        cities = JSON.parse(cities);
+        cities.push(city);
+    }
+    else {
+        cities = [city];
+    }
+    localStorage.setItem("cities", JSON.stringify(cities))
+    displaySearchedCitiesList();
 }
 
 function displaySearchedCitiesList() {
 
-    if(localStorage.getItem("cities")){
-        var cities = localStorage.getItem("cities");
-        for (let i=0; i<cities.length; i++) {
-            var row = searchHistoryEl.insertRow(1);
-            var cell = row.insertCell(0);
-            cell.innerHTML = cities[i];
+    if (localStorage.getItem("cities")) {
+        var cities = JSON.parse(localStorage.getItem("cities"));
+        for (let i = 0; i < cities.length; i++) {
+            var cityName = document.createElement('p')
+            cityName.setAttribute("class", "bg-primary")
+            cityName.setAttribute("class", "d-print-block")
+            cityName.textContent = cities[i]
+            searchHistoryEl.appendChild(cityName)
         }
     }
-
-   
 }
 
 
@@ -182,9 +189,10 @@ var searchHandler = function (event) {
         alert("Please enter valid City for search");
     }
     saveCityName(city);
-    //displaySearchedCitiesList();  Not working.
+    displaySearchedCitiesList();
 
 }
 
 
 citySearchEl.addEventListener("click", searchHandler)
+displaySearchedCitiesList();
