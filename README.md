@@ -37,7 +37,7 @@ THEN I am again presented with current and future conditions for that city
 
 ### Deployment
 
-* Application deployed at live URL  https://sharonealex.github.io/WorkDayScheduler/.
+* Application deployed at live URL  https://sharonealex.github.io/WeatherApp/
 
 
 
