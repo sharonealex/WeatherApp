@@ -1,6 +1,7 @@
 var searchButton = document.querySelector("#search-button");
 var searchInput = document.querySelector("input");
 var todayContainer = document.querySelector("#today")
+
 var weatherApiRootUrl = 'https://api.openweathermap.org';
 var weatherApiKey = 'd91f911bcf2c0f925fb6535547a5ddc9';
 var forecastEl = document.querySelector("#forecast")
@@ -129,10 +130,13 @@ function renderItems(city, data) {
 }
 
 function appendToHistory(city) {
-    if (searchHistory.indexOf(city == -1)) {
+    var isPresent = searchHistory.indexOf(city); //-1
+    if (isPresent == -1) {
         searchHistory.push(city)
         window.localStorage.setItem("search-history", JSON.stringify(searchHistory))
         renderSearchHistory()
+    }else {
+        return;
     }
 }
 
@@ -202,7 +206,17 @@ function initSearchHistory() {
     renderSearchHistory();
 }
 
-searchButton.addEventListener("click", handleSearchFormSubmit)
+function handleSearchHistoryClick(e){
+e.preventDefault();
+if(e.target.matches(".history-btn")){
+    var btn = e.target;
+    var searchedCity = btn.getAttribute("data-search");
+    getCoordinates(searchedCity)
+}
+}
+
+searchButton.addEventListener("click", handleSearchFormSubmit);
+historyContainerEl.addEventListener("click", handleSearchHistoryClick)
 initSearchHistory();
 
 
